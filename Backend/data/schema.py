@@ -25,4 +25,18 @@ def schema(dbpath=DBPATH):
 
         cur.execute(SQL)
 
+        cur.execute(DROPSQL.format(tablename="passwords"))
+
+        SQL = """CREATE TABLE passwords(
+                pk INTEGER PRIMARY KEY AUTOINCREMENT,
+                email VARCHAR UNIQUE,
+                username VARCHAR(16) NOT NULL,
+                password_hash VARCHAR(128),
+                salt VARCHAR UNIQUE,
+                site_name VARCHAR,
+                UNIQUE(username)
+            );"""
+
+        cur.execute(SQL)
+
 
