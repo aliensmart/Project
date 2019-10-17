@@ -20,13 +20,14 @@ class Account(ORM):
 
     @classmethod
     def login(cls, username, password):
+        #W
         salt = cls.one_col_from_where_clause("salt", "WHERE username=?", (username,))
-        return cls.one_from_where_clause("WHERE username=? AND password_hash=?",
-                                        (username, hash_password(password,salt) ))
+        if salt:
 
-    # def set_salt(self):
-    #     self.salt = bcrypt.gensalt()
-    #     return self.set_salt
+            return cls.one_from_where_clause("WHERE username=? AND password_hash=?",
+                                        (username, hash_password(password,salt) ))
+        else:
+            return None
 
     def set_password(self, password):
         self.salt = bcrypt.gensalt()
