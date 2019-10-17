@@ -1,0 +1,3 @@
+[submodule "kpass_frontend"]
+	path = kpass_frontend
+	url = https://github.com/aliensmart/kpass_frontend
