@@ -16,10 +16,11 @@ def create_account():
     account.email = data["email"]
     account.username = data["username"]
     password = data["password"]
+    salt = bcrypt.gensalt()
+    account.salt = salt
     confirm_password = data["password_confirmation"]
     if confirm_password == password:
-        salt = bcrypt.gensalt()
-        account.salt = salt
+        
         hashed_pass = util.hash_password(password, salt)
         account.password_hash = hashed_pass
         account.api_key = api_key
@@ -42,10 +43,6 @@ def get_api_key():
         return jsonify({"api":api})
     else:
         return jsonify({"error":"account not found"})
-
-
-
-
 
 
 @app.errorhandler(404)
