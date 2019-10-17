@@ -1,12 +1,13 @@
 from kpass.orm import ORM
-from .util import hash_password, get_price
+import bcrypt
+from .util import hash_password
 import random
 
 
 class Account(ORM):
 
     tablename = "accounts"
-    fields = ['username', 'password_hash', 'email', 'api_key']
+    fields = ['username', 'password_hash', 'salt', 'email', 'api_key']
 
     def __init__(self, **kwargs):
         self.pk = kwargs.get('pk')
@@ -14,14 +15,22 @@ class Account(ORM):
         self.password_hash = kwargs.get('password_hash')
         self.email = kwargs.get("email")
         self.api_key = kwargs.get("api_key")
+        self.salt = kwargs.get("salt")
+        
 
     @classmethod
     def login(cls, username, password):
+        salt = cls.one_col_from_where_clause("salt", "WHERE username=?", (username,))
         return cls.one_from_where_clause("WHERE username=? AND password_hash=?",
-                                        (username, hash_password(password)))
+                                        (username, hash_password(password,salt) ))
+
+    # def set_salt(self):
+    #     self.salt = bcrypt.gensalt()
+    #     return self.set_salt
 
     def set_password(self, password):
-        self.password_hash = hash_password(password)
+        self.salt = bcrypt.gensalt()
+        self.password_hash = hash_password(password, self.salt)
     
     def generate_api_key(self):
         """

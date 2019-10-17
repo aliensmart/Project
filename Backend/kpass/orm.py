@@ -80,6 +80,19 @@ class ORM:
     def one_from_pk(cls, pk):
         return cls.one_from_where_clause("WHERE pk=?", (pk,))
 
+    @classmethod
+    def one_col_from_where_clause(cls, col="", where_clause="", values=tuple()):
+        SQL = "SELECT {} FROM {} {}".format(col ,cls.tablename, where_clause)
+        with sqlite3.connect(cls.dbpath) as conn:
+            conn.row_factory = sqlite3.Row
+            curs = conn.cursor()
+            curs.execute(SQL, values)
+            column = curs.fetchone()
+            if not column:
+                return None
+            return column["salt"]
+
+
     def __repr__(self):
         pattern = "<{} ORM: pk={}>"
         return pattern.format(self.tablename, self.pk)

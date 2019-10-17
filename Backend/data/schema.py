@@ -18,6 +18,7 @@ def schema(dbpath=DBPATH):
                 email VARCHAR UNIQUE,
                 username VARCHAR(16) NOT NULL,
                 password_hash VARCHAR(128),
+                salt VARCHAR UNIQUE,
                 api_key VARCHAR UNIQUE,
                 UNIQUE(username)
             );"""

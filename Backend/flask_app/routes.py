@@ -1,6 +1,7 @@
 from flask import jsonify, request
 from .run import app
 from kpass import Account, util
+import bcrypt
 
 @app.route('/', methods=["GET"])
 def root():
@@ -12,19 +13,26 @@ def create_account():
     data = request.get_json()
     api_key = util.random_api_key()
     account = Account()
+    account.email = data["email"]
     account.username = data["username"]
     password = data["password"]
-    hashed_pass = util.hash_password(password)
-    account.password_hash = hashed_pass
-    account.api_key = api_key
-    account.save()
-    return jsonify({"api_key":account.api_key})
+    confirm_password = data["password_confirmation"]
+    if confirm_password == password:
+        salt = bcrypt.gensalt()
+        account.salt = salt
+        hashed_pass = util.hash_password(password, salt)
+        account.password_hash = hashed_pass
+        account.api_key = api_key
+        account.save()
+        return jsonify({"api_key":account.api_key})
+    else:
+        return jsonify({"error": "password not matched"})
 
 @app.route('/api/get_api_key', methods=['POST'])
 def get_api_key():
     if not request.json:
         return jsonify({"error":'bad request'})
-    if 'username' not in request.json and 'password' not in request.json:
+    if 'username' not in request.json or 'password' not in request.json:
         return jsonify({'error' : 'check username or password'})
     data = request.get_json()
     
