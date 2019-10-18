@@ -19,8 +19,8 @@ def create_account():
     salt = bcrypt.gensalt()
     account.salt = salt
     confirm_password = data["password_confirmation"]
+
     if confirm_password == password:
-        
         hashed_pass = util.hash_password(password, salt)
         account.password_hash = hashed_pass
         account.api_key = api_key
@@ -36,10 +36,9 @@ def get_api_key():
     if 'username' not in request.json or 'password' not in request.json:
         return jsonify({'error' : 'check username or password'})
     data = request.get_json()
-    
     account = Account.login(username=data["username"], password=data["password"])
-    api = account.get_api()
     if account != None:
+        api = account.get_api()
         return jsonify({"api":api})
     else:
         return jsonify({"error":"account not found"})
