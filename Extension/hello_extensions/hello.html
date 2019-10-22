@@ -7,6 +7,14 @@
   <title>Hello Extension</title>
 </head>
 <body>
-  <h1>Hello Extensions</h1>
+  <form action="http://localhost:5000/api/get_api_key" method="post">
+    <input type="text" name="username" id="username" placeholder="username">
+    
+    <input type="password" name="password" id="password" placeholder="password">
+    <!-- <input type="password" name="password_confirmation" id="password_confirmation" placeholder="confirm password">
+    <input type="email" name="email" id="email" placeholder="your email"> -->
+    <input type="submit" value="Submit">
+
+  </form>
 </body>
 </html>

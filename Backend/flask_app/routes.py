@@ -12,6 +12,7 @@ def root():
 def create_account():
     data = request.get_json()
     api_key = util.random_api_key()
+    print(data)
     account = Account()
     account.email = data["email"]
     account.username = data["username"]
@@ -31,7 +32,7 @@ def create_account():
 
 @app.route('/api/get_api_key', methods=['POST'])
 def get_api_key():
-    if not request.json:
+    if not request.json():
         return jsonify({"error":'bad request'})
     if 'username' not in request.json or 'password' not in request.json:
         return jsonify({'error' : 'check username or password'})
