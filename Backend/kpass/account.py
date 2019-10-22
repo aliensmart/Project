@@ -2,6 +2,7 @@ from kpass.orm import ORM
 import bcrypt
 from .util import hash_password
 import random
+from .passwords import Passwords
 
 
 class Account(ORM):
@@ -55,5 +56,11 @@ class Account(ORM):
     def api_authenticate(cls, api_key):
         return cls.one_from_where_clause("WHERE api_key=?",
                                         (api_key,))
+
+    
+    def get_passwords(self):
+        """return all Password where account_pk == self.pk
+        returns a lis of Passwords objects"""
+        return Passwords.all_from_where_clause("WHERE account_pk=?", (self.pk,))
 
 
