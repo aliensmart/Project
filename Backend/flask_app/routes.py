@@ -1,6 +1,6 @@
 from flask import jsonify, request
 from .run import app
-from kpass import Account, util
+from kpass import Account, util, Passwords
 import bcrypt
 
 @app.route('/', methods=["GET"])
@@ -60,6 +60,35 @@ def get_pass(api_key):
         data_list.append(data_dict)
     
     return jsonify({"passwords": data_list})
+
+@app.route('/api/<api_key>/passwords_post', methods=["POST"])
+def post_passwords(api_key):
+    data = request.get_json()
+    #account of the user by the api
+    account = Account.api_authenticate(api_key)
+
+    #intialized the passwords class
+    passwords = Passwords()
+    passwords.email = data['email']
+
+    #created the salt and the password
+    salt = bcrypt.gensalt()
+    passwords.salt = salt
+    password = data['password']
+    hashed_pass = util.hash_password(password, salt)
+    passwords.password_hash = hashed_pass
+
+    passwords.site_name = data["site_name"]
+    passwords.account_pk = account.pk
+    passwords.username = data['username']
+
+    passwords.save()
+
+    return jsonify({"Added":"worked"})
+
+
+     
+
 
 
 @app.errorhandler(404)
