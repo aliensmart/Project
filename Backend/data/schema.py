@@ -15,12 +15,12 @@ def schema(dbpath=DBPATH):
 
         SQL = """CREATE TABLE accounts(
                 pk INTEGER PRIMARY KEY AUTOINCREMENT,
-                email VARCHAR,
+                email VARCHAR UNIQUE,
                 username VARCHAR(16) NOT NULL,
                 password_hash VARCHAR(128),
-                salt VARCHAR,
-                api_key VARCHAR,
-                UNIQUE(username, salt, api_key, email)
+                salt VARCHAR UNIQUE,
+                api_key VARCHAR UNIQUE,
+                UNIQUE(username)
             );"""
 
         cur.execute(SQL)
