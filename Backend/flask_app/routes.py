@@ -32,7 +32,7 @@ def create_account():
 
 @app.route('/api/get_api_key', methods=['POST'])
 def get_api_key():
-    if not request.json():
+    if not request.json:
         return jsonify({"error":'bad request'})
     if 'username' not in request.json or 'password' not in request.json:
         return jsonify({'error' : 'check username or password'})
@@ -51,10 +51,9 @@ def get_pass(api_key):
     data_list = []
     for passw in passwords:
         data_dict = {}
-        data_dict["pk"] = passw.pk
         data_dict["email"] = passw.email
         data_dict["username"] = passw.username
-        data_dict["password_hash"] = passw.password_hash
+        data_dict["password_hash"] = str(passw.password_hash)
         data_dict["site_name"] = passw.site_name
         data_dict["account_pk"] = passw.account_pk
         data_list.append(data_dict)
