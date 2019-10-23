@@ -49,14 +49,18 @@ def get_pass(api_key):
     account = Account.api_authenticate(api_key)
     passwords = account.get_passwords()
     data_list = []
+    count = 1
     for passw in passwords:
         data_dict = {}
+        data_dict['id'] = count
         data_dict["email"] = passw.email
         data_dict["username"] = passw.username
         data_dict["password_hash"] = str(passw.password_hash)
         data_dict["site_name"] = passw.site_name
+        data_dict["url"] = passw.url
         data_dict["account_pk"] = passw.account_pk
         data_list.append(data_dict)
+        count +=1
     
     return jsonify({"passwords": data_list})
 
