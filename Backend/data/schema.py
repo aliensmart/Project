@@ -34,6 +34,7 @@ def schema(dbpath=DBPATH):
                 password_hash VARCHAR(128) NOT NULL,
                 salt VARCHAR UNIQUE,
                 site_name VARCHAR,
+                url VARCHAR NOT NULL,
                 account_pk INTEGER,
                 FOREIGN KEY(account_pk) REFERENCES accounts(pk)
                 
