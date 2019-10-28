@@ -52,6 +52,7 @@ def get_pass(api_key):
     count = 1
     for passw in passwords:
         data_dict = {}
+        data_dict['pk'] = passw.pk
         data_dict['id'] = count
         data_dict["email"] = passw.email
         data_dict["username"] = passw.username
@@ -82,6 +83,7 @@ def post_passwords(api_key):
     passwords.password_hash = hashed_pass
 
     passwords.site_name = data["site_name"]
+    passwords.url = data["url"]
     passwords.account_pk = account.pk
     passwords.username = data['username']
 
@@ -89,10 +91,36 @@ def post_passwords(api_key):
 
     return jsonify({"Added":"worked"})
 
+@app.route('/api/<api_key>/delete', methods=["POST"])
+def delet(api_key):
+    account = Account().api_authenticate(api_key)
+    data = request.get_json()
+    pk = data['pk']
+    print(pk)
+    password = Passwords(pk=pk)
+    print(password)
+    password.delete()
+    account.save()
+    return jsonify({"deleted":True})
 
-     
-
-
+@app.route('/api/<api_key>/<site>', methods=["GET"])
+def get_site(api_key, site):
+    account = Account.api_authenticate(api_key)
+    password = account.search(site)
+    print(password)
+    if password:
+        for passw in password:
+            data = {}
+            data['pk'] = passw.pk
+            data["email"] = passw.email
+            data["username"] = passw.username
+            data["password_hash"] = str(passw.password_hash)
+            data["site_name"] = passw.site_name
+            data["url"] = passw.url
+            data["account_pk"] = passw.account_pk
+            return jsonify({"your_pass":data})
+    else:
+        return jsonify({"erro":"not"})
 
 @app.errorhandler(404)
 def err_404(e):

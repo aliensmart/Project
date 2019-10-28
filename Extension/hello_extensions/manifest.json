@@ -1,20 +1,22 @@
-
 {
-  "name":"Hello Extension",
-  "description":"Base Level Extension",
-  "version":"1.0",
-  "manifest_version":2,
-  "browser_action":{
-    "default_popup":"hello.html",
-    "default_icon":"hello_extensions.png"
-  },
-  "command":{
-    "_execute_browser_action":{
-      "suggested_key":{
-        "default":"Ctrl+Shift+F",
-        "mac":"MacCtrl+Shift+F"
-      },
-      "descriptions": "Opens hello.html"
-    }
+    
+  "name": "new data",
+  "description": "form data look up",
+  "version": "1",
+  "content_scripts":[
+  {
+    "matches":["<all_urls>"],
+    "js":["content.js"]
   }
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  },
+
+  "permissions": [
+  "webRequestBlocking",
+    "webRequest",
+    "<all_urls>"
+  ],
+  "manifest_version": 2
 }

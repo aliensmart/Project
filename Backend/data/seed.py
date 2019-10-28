@@ -15,7 +15,7 @@ def seed(dbpath=DBPATH):
     mike_bloom.set_password("password")
     mike_bloom.save()
 
-    account_1 = Passwords(email="kaoua121@gmail.com", username="mike_bloom", password="password", site_name="FaceBook", account_pk=1)
+    account_1 = Passwords(email="kaoua121@gmail.com", username="mike_bloom", password="password", site_name="FaceBook", account_pk=1, url="https://www.facebook.com/")
     account_1.set_password("password")
     account_1.save()
 
@@ -23,6 +23,6 @@ def seed(dbpath=DBPATH):
     justin_sarra.set_password("password")
     justin_sarra.save()
 
-    account_2 = Passwords(email="justPerf@gmail.com", username="mike_bloom", password="password", site_name="FaceBook", account_pk=2)
+    account_2 = Passwords(email="justPerf@gmail.com", username="mike_bloom", password="password", site_name="FaceBook", account_pk=2, url="https://www.facebook.com/")
     account_2.set_password("password")
     account_2.save()

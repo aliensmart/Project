@@ -62,5 +62,7 @@ class Account(ORM):
         """return all Password where account_pk == self.pk
         returns a lis of Passwords objects"""
         return Passwords.all_from_where_clause("WHERE account_pk=?", (self.pk,))
-
-
+    
+    def search(self, site):
+        return Passwords.all_from_where_clause("WHERE site_name=?", values=(site,))
+        
