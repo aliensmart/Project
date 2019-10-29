@@ -1,31 +1,10 @@
-// const axios = require('axios')
 let btn = document.getElementById('btn')
 btn.addEventListener('click', getToken)
 
 function getToken(){
-    
-    // if(window.localStorage.getItem('token')== null){
-    //     window.location = "popup.html"
+
 let inputPassword = document.getElementById('password').value
 let inputUsername = document.getElementById('username').value
-
-
-
-    // const sendData = async ()=>{
-    //     try{
-    //         const data = {
-    //             username: inputUsername,
-    //             password: inputPassword
-    //         }
-    //         const res = await axios.post('http://localhost:5000/api/get_api_key', data)
-    //         console.log(res.data.api)
-    //         alert(res.data.api)
-    //         window.localStorage.setItem('token', res.data.api )
-    //     }catch(error){
-    //         console.log(error)
-    //     }
-    // }
-    // sendData()
 
     let xhr = new XMLHttpRequest();
     let url = 'http://localhost:5000/api/get_api_key';
@@ -47,8 +26,3 @@ let inputUsername = document.getElementById('username').value
     xhr.send(data)
 
 }
-    
-// }else{
-//     window.location = "index.html"
-// }
-
