@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <form id="addbookmark">
+        <p>
+            <label for="title">Title</label><br />
+            <input type="text" id="title" name="title" size="50" value="" />
+        </p>
+        <p>
+            <label for="url">Url</label><br />
+            <input type="text" id="url" name="url" size="50" value="" />
+        </p>
+        <p>
+            <label for="summary">Summary</label><br />
+            <textarea id="summary" name="summary" rows="6" cols="35">
+            </textarea>
+        </p>
+        <p>
+            <label for="tags">Tags</label><br />
+            <input type="text" id="tags" name="tags" size="50" value="" />
+        </p>
+        <p>
+            <input id="save" type="submit" value="Save Bookmark" />
+            <span id="status-display"></span>
+        </p>
+    </form>
+</body>
+<script src="second.js"></script>
+</html>

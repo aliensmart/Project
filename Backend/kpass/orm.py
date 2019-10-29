@@ -49,6 +49,8 @@ class ORM:
             SQL = """ DELETE FROM {} WHERE pk = ?;""".format(self.tablename)
             curs.execute(SQL, (self.pk,))
 
+    
+
     @classmethod
     def one_from_where_clause(cls, where_clause="", values=tuple()):
         """ where_clause is something like 'WHERE pk=?' and vlaues is a tuple 
@@ -91,6 +93,9 @@ class ORM:
             if not column:
                 return None
             return column["salt"]
+
+
+    
 
 
     def __repr__(self):

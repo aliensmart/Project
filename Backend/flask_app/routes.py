@@ -32,6 +32,8 @@ def create_account():
 
 @app.route('/api/get_api_key', methods=['POST'])
 def get_api_key():
+    print(request.form)
+    print(request.get_json())
     if not request.json:
         return jsonify({"error":'bad request'})
     if 'username' not in request.json or 'password' not in request.json:
