@@ -70,6 +70,7 @@ def get_pass(api_key):
 @app.route('/api/<api_key>/passwords_post', methods=["POST"])
 def post_passwords(api_key):
     data = request.get_json()
+    print(data)
     #account of the user by the api
     account = Account.api_authenticate(api_key)
 

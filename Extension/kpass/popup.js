@@ -13,12 +13,14 @@ let inputUsername = document.getElementById('username').value
     xhr.onreadystatechange = function(){
         if(xhr.readyState===4 & xhr.status===200){
             let response = JSON.parse(this.responseText)
+            console.log(response)
             chrome.storage.local.set({"key": response.api}, function() {
                 console.log('Value is set to ' + response.api);
               })
             console.log(response.api)
             if(response.api){
                 chrome.browserAction.setPopup({popup:"second.html"})
+                window.setTimeout(window.close, 500)
             }
         }
     }

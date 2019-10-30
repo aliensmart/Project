@@ -4,6 +4,11 @@ chrome.runtime.sendMessage({
     'url': window.location.href,
 });
 
+forms = document.getElementsByName('form')
+for (let form of forms){
+    console.log(typeof(form))
+}
+
 // //start connection in content script
 // let contentPort = chrome.runtime.connect({
 //     name: 'background-content'
