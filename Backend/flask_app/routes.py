@@ -31,28 +31,33 @@ def create_account():
     salt = bcrypt.gensalt()
     account.salt = salt
     confirm_password = data["password_confirmation"]
-    
-    if len(password) < 8:
-        return jsonify({"error":"password must be at least 8 char"})
+    #check if email password and username are not empty
+    if account.username==None or password==None:
+        return jsonify({"error":"password, email, and username must be filled"})
+    if account.email==None:
+        return jsonify({"error":"Please check your email"})
     else:
-        #character for the passwords
-        reg = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{6,20}$"
-        #compiling regex
-        pat = re.compile(reg)
-        #searching regex
-        mat = re.search(pat, password)
-        print(mat)
-        if mat:
-            if confirm_password == password:
-                hashed_pass = util.hash_password(password, salt)
-                account.password_hash = hashed_pass
-                account.api_key = api_key
-                account.save()
-                return jsonify({"api_key":account.api_key})
-            else:
-                return jsonify({"error": "password not matched"})
+        if len(password) < 8:
+            return jsonify({"error":"password must be at least 8 char"})
         else:
-            return jsonify({"error": "password must have at least one number, one uppercase and one lowercase"})
+            #character for the passwords
+            reg = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{6,20}$"
+            #compiling regex
+            pat = re.compile(reg)
+            #searching regex
+            mat = re.search(pat, password)
+            print(mat)
+            if mat:
+                if confirm_password == password:
+                    hashed_pass = util.hash_password(password, salt)
+                    account.password_hash = hashed_pass
+                    account.api_key = api_key
+                    account.save()
+                    return jsonify({"api_key":account.api_key})
+                else:
+                    return jsonify({"error": "password not matched"})
+            else:
+                return jsonify({"error": "password must have at least one number, one uppercase and one lowercase"})
 
 @app.route('/api/get_api_key', methods=['POST'])
 def get_api_key():
@@ -121,9 +126,7 @@ def delet(api_key):
     account = Account().api_authenticate(api_key)
     data = request.get_json()
     pk = data['pk']
-    print(pk)
     password = Passwords(pk=pk)
-    print(password)
     password.delete()
     account.save()
     return jsonify({"deleted":True})
@@ -132,7 +135,7 @@ def delet(api_key):
 def get_site(api_key, site):
     account = Account.api_authenticate(api_key)
     password = account.search(site)
-    print(password)
+
     if password:
         for passw in password:
             data = {}
