@@ -2,6 +2,7 @@ from flask import jsonify, request
 from .run import app
 from kpass import Account, util, Passwords
 import bcrypt
+import re
 
 @app.route('/', methods=["GET"])
 def root():
@@ -12,28 +13,49 @@ def root():
 def create_account():
     data = request.get_json()
     api_key = util.random_api_key()
-    print(data)
     account = Account()
-    account.email = data["email"]
+    def validate_email():
+        email = data["email"]
+        #validate email with these characters
+        regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
+        if(re.search(regex, email)):
+            return email
+        
+    account.email = validate_email()
+    print(account.email)
     account.username = data["username"]
+
+    #Getting password from the post request
     password = data["password"]
+    
     salt = bcrypt.gensalt()
     account.salt = salt
     confirm_password = data["password_confirmation"]
-
-    if confirm_password == password:
-        hashed_pass = util.hash_password(password, salt)
-        account.password_hash = hashed_pass
-        account.api_key = api_key
-        account.save()
-        return jsonify({"api_key":account.api_key})
+    
+    if len(password) < 8:
+        return jsonify({"error":"password must be at least 8 char"})
     else:
-        return jsonify({"error": "password not matched"})
+        #character for the passwords
+        reg = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{6,20}$"
+        #compiling regex
+        pat = re.compile(reg)
+        #searching regex
+        mat = re.search(pat, password)
+        print(mat)
+        if mat:
+            if confirm_password == password:
+                hashed_pass = util.hash_password(password, salt)
+                account.password_hash = hashed_pass
+                account.api_key = api_key
+                account.save()
+                return jsonify({"api_key":account.api_key})
+            else:
+                return jsonify({"error": "password not matched"})
+        else:
+            return jsonify({"error": "password must have at least one number, one uppercase and one lowercase"})
 
 @app.route('/api/get_api_key', methods=['POST'])
 def get_api_key():
-    print(request.form)
-    print(request.get_json())
     if not request.json:
         return jsonify({"error":'bad request'})
     if 'username' not in request.json or 'password' not in request.json:

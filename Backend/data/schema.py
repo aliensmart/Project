@@ -15,7 +15,7 @@ def schema(dbpath=DBPATH):
 
         SQL = """CREATE TABLE accounts(
                 pk INTEGER PRIMARY KEY AUTOINCREMENT,
-                email VARCHAR UNIQUE,
+                email VARCHAR UNIQUE NOT NULL,
                 username VARCHAR(16) NOT NULL,
                 password_hash VARCHAR(128),
                 salt VARCHAR UNIQUE,
@@ -34,7 +34,7 @@ def schema(dbpath=DBPATH):
                 password_hash VARCHAR(128) NOT NULL,
                 salt VARCHAR UNIQUE,
                 site_name VARCHAR,
-                url VARCHAR NOT NULL,
+                url VARCHAR UNIQUE NOT NULL,
                 account_pk INTEGER,
                 FOREIGN KEY(account_pk) REFERENCES accounts(pk)
                 

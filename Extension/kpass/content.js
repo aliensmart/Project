@@ -1,7 +1,7 @@
 // Send a message containing the page details back to the event page
 chrome.runtime.sendMessage({
     'title': document.title,
-    'url': window.location.href,
+    'url': window.location.protocol + "//"+ window.location.hostname,
 });
 
 forms = document.getElementsByName('form')
