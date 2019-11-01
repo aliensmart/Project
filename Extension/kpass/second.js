@@ -28,8 +28,6 @@ function viewPass(){
 function onPageDetailsReceived(pageDetails){
     document.getElementById('title').value = pageDetails.title;
     document.getElementById('url').value = pageDetails.url;
-    let url = pageDetails.url;
-    console.log(url)
     
 }
 

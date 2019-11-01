@@ -19,6 +19,7 @@ let inputUsername = document.getElementById('username').value
               })
             console.log(response.api)
             if(response.api){
+                
                 chrome.browserAction.setPopup({popup:"second.html"})
                 window.setTimeout(window.close, 500)
             }

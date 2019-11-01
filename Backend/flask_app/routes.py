@@ -20,6 +20,8 @@ def create_account():
         regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
         if(re.search(regex, email)):
             return email
+        else:
+            return jsonify({"error":"Please Verify your email"})
         
     account.email = validate_email()
     print(account.email)
@@ -32,32 +34,28 @@ def create_account():
     account.salt = salt
     confirm_password = data["password_confirmation"]
     #check if email password and username are not empty
-    if account.username==None or password==None:
-        return jsonify({"error":"password, email, and username must be filled"})
-    if account.email==None:
-        return jsonify({"error":"Please check your email"})
+ 
+    if len(password) < 8:
+        return jsonify({"error":"password must be at least 8 charactere"})
     else:
-        if len(password) < 8:
-            return jsonify({"error":"password must be at least 8 char"})
-        else:
-            #character for the passwords
-            reg = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{6,20}$"
-            #compiling regex
-            pat = re.compile(reg)
-            #searching regex
-            mat = re.search(pat, password)
-            print(mat)
-            if mat:
-                if confirm_password == password:
-                    hashed_pass = util.hash_password(password, salt)
-                    account.password_hash = hashed_pass
-                    account.api_key = api_key
-                    account.save()
-                    return jsonify({"api_key":account.api_key})
-                else:
-                    return jsonify({"error": "password not matched"})
+        #character for the passwords
+        reg = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{6,20}$"
+        #compiling regex
+        pat = re.compile(reg)
+        #searching regex
+        mat = re.search(pat, password)
+        print(mat)
+        if mat:
+            if confirm_password == password:
+                hashed_pass = util.hash_password(password, salt)
+                account.password_hash = hashed_pass
+                account.api_key = api_key
+                account.save()
+                return jsonify({"api_key":account.api_key})
             else:
-                return jsonify({"error": "password must have at least one number, one uppercase and one lowercase"})
+                return jsonify({"error": "password not matched"})
+        else:
+            return jsonify({"error": "password must have at least one number, one uppercase and one lowercase"})
 
 @app.route('/api/get_api_key', methods=['POST'])
 def get_api_key():
@@ -71,7 +69,7 @@ def get_api_key():
         api = account.get_api()
         return jsonify({"api":api})
     else:
-        return jsonify({"error":"account not found"})
+        return jsonify({"error":"account not found, please check email or password"})
 
 @app.route('/api/<api_key>/passwords', methods=["GET"])
 def get_pass(api_key):
