@@ -4,11 +4,14 @@ from kpass import Account, util, Passwords
 import bcrypt
 import re
 
+
+#--------------------------------Main Route-------------------------------------------
 @app.route('/', methods=["GET"])
 def root():
     return jsonify({"name":"Welcom to Kpass API"})
 
 
+#--------------------------------Account creation Route-------------------------------------------
 @app.route('/api/create', methods=['POST'])
 def create_account():
     data = request.get_json()
@@ -20,8 +23,6 @@ def create_account():
         regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
         if(re.search(regex, email)):
             return email
-        else:
-            return jsonify({"error":"Please Verify your email"})
         
     account.email = validate_email()
     print(account.email)
@@ -29,34 +30,39 @@ def create_account():
 
     #Getting password from the post request
     password = data["password"]
-    
     salt = bcrypt.gensalt()
     account.salt = salt
     confirm_password = data["password_confirmation"]
     #check if email password and username are not empty
- 
-    if len(password) < 8:
-        return jsonify({"error":"password must be at least 8 charactere"})
+    if account.username=="" or password=='' or account.email==None:
+        return jsonify({"error": "All field must be filled or review your email"})
     else:
-        #character for the passwords
-        reg = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{6,20}$"
-        #compiling regex
-        pat = re.compile(reg)
-        #searching regex
-        mat = re.search(pat, password)
-        print(mat)
-        if mat:
-            if confirm_password == password:
-                hashed_pass = util.hash_password(password, salt)
-                account.password_hash = hashed_pass
-                account.api_key = api_key
-                account.save()
-                return jsonify({"api_key":account.api_key})
-            else:
-                return jsonify({"error": "password not matched"})
+        if len(password) < 8:
+            return jsonify({"error":"password must be at least 8 charactere"})
         else:
-            return jsonify({"error": "password must have at least one number, one uppercase and one lowercase"})
+            #character for the passwords
+            reg = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{6,20}$"
+            #compiling regex
+            pat = re.compile(reg)
+            #searching regex
+            mat = re.search(pat, password)
+            print(mat)
+            if mat:
+                if confirm_password == password:
+                    hashed_pass = util.hash_password(password, salt)
+                    account.password_hash = hashed_pass
+                    account.api_key = api_key
+                    account.save()
+                    return jsonify({"api_key":account.api_key})
+                else:
+                    return jsonify({"error": "password not matched"})
+            else:
+                return jsonify({"error": "password must have at least one number, one uppercase and one lowercase"})
 
+
+#------------------------------------------------------------------------------------------------------------------------------
+#--------------------------------Login Route-----------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------------
 @app.route('/api/get_api_key', methods=['POST'])
 def get_api_key():
     if not request.json:
@@ -71,6 +77,10 @@ def get_api_key():
     else:
         return jsonify({"error":"account not found, please check email or password"})
 
+
+#------------------------------------------------------------------------------------------------------------------------------
+#--------------------------------Retrieve passwords Route-----------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------------
 @app.route('/api/<api_key>/passwords', methods=["GET"])
 def get_pass(api_key):
     account = Account.api_authenticate(api_key)
@@ -92,6 +102,10 @@ def get_pass(api_key):
     
     return jsonify({"passwords": data_list})
 
+
+#------------------------------------------------------------------------------------------------------------------------------
+#--------------------------------Posting passwords to the database Route-----------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------------
 @app.route('/api/<api_key>/passwords_post', methods=["POST"])
 def post_passwords(api_key):
     data = request.get_json()
@@ -133,6 +147,7 @@ def delet(api_key):
 def get_site(api_key, site):
     account = Account.api_authenticate(api_key)
     password = account.search(site)
+    print(password)
 
     if password:
         for passw in password:

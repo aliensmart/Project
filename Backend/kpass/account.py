@@ -8,7 +8,7 @@ from .passwords import Passwords
 class Account(ORM):
 
     tablename = "accounts"
-    fields = ['username', 'password_hash', 'salt', 'email', 'api_key']
+    fields = ['username', 'password_hash', 'salt', 'email', 'api_key', 'user_id']
 
     def __init__(self, **kwargs):
         self.pk = kwargs.get('pk')
@@ -17,10 +17,11 @@ class Account(ORM):
         self.email = kwargs.get("email")
         self.api_key = kwargs.get("api_key")
         self.salt = kwargs.get("salt")
+        self.user_id = kwargs.get("user_id")
         
 
     @classmethod
-    def login(cls, username, password):
+    def login(cls, username,  password):
         #W
         salt = cls.one_col_from_where_clause("salt", "WHERE username=?", (username,))
         if salt:
