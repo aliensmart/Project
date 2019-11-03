@@ -21,8 +21,11 @@ def create_account():
         email = data["email"]
         #validate email with these characters
         regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
+        
         if(re.search(regex, email)):
             return email
+        else:
+            return jsonify({"Check your Email"})
         
     account.email = validate_email()
     print(account.email)
@@ -112,18 +115,15 @@ def post_passwords(api_key):
     print(data)
     #account of the user by the api
     account = Account.api_authenticate(api_key)
-
     #intialized the passwords class
     passwords = Passwords()
     passwords.email = data['email']
-
     #created the salt and the password
     salt = bcrypt.gensalt()
     passwords.salt = salt
     password = data['password']
     hashed_pass = util.hash_password(password, salt)
     passwords.password_hash = hashed_pass
-
     passwords.site_name = data["site_name"]
     passwords.url = data["url"]
     passwords.account_pk = account.pk
@@ -133,6 +133,10 @@ def post_passwords(api_key):
 
     return jsonify({"Added":"worked"})
 
+
+#------------------------------------------------------------------------------------------------------------------------------
+#--------------------------------Delete Route-----------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------------
 @app.route('/api/<api_key>/delete', methods=["POST"])
 def delet(api_key):
     account = Account().api_authenticate(api_key)
@@ -143,6 +147,10 @@ def delet(api_key):
     account.save()
     return jsonify({"deleted":True})
 
+
+#------------------------------------------------------------------------------------------------------------------------------
+#--------------------------------get site passwords Route-----------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------------
 @app.route('/api/<api_key>/<site>', methods=["GET"])
 def get_site(api_key, site):
     account = Account.api_authenticate(api_key)
@@ -163,10 +171,19 @@ def get_site(api_key, site):
     else:
         return jsonify({"erro":"not"})
 
+
+
+#------------------------------------------------------------------------------------------------------------------------------
+#--------------------------------404 ERROR Route-----------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------------
 @app.errorhandler(404)
 def err_404(e):
     return jsonify({"error": "Not found"}), 404
 
+
+#------------------------------------------------------------------------------------------------------------------------------
+#--------------------------------405 ERROR Route-----------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------------
 @app.errorhandler(405)
 def err_405(e):
     return jsonify({"error":"method not allowed"})
