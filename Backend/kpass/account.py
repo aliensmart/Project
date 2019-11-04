@@ -3,7 +3,7 @@ import bcrypt
 from .util import hash_password
 import random
 from .passwords import Passwords
-import os
+from cryptography.fernet import Fernet
 
 
 class Account(ORM):
@@ -69,4 +69,7 @@ class Account(ORM):
         return Passwords.all_from_where_clause("WHERE site_name=?", values=(site,))
         
     def set_key(self):
-        self.user_key = os.urandom(32)
+        self.user_key = Fernet.generate_key()
+
+    def get_key(self):
+        return self.user_key

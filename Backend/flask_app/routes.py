@@ -3,6 +3,8 @@ from .run import app
 from kpass import Account, util, Passwords
 import bcrypt
 import re
+import cryptography
+from cryptography.fernet import Fernet
 
 
 #--------------------------------Main Route-------------------------------------------
@@ -34,6 +36,7 @@ def create_account():
     password = data["password"]
     salt = bcrypt.gensalt()
     account.salt = salt
+    account.set_key()
     confirm_password = data["password_confirmation"]
     #check if email password and username are not empty
     if account.username=="" or password=='' or account.email==None:
@@ -86,16 +89,20 @@ def get_api_key():
 @app.route('/api/<api_key>/passwords', methods=["GET"])
 def get_pass(api_key):
     account = Account.api_authenticate(api_key)
+    key = account.get_key()
+    f = Fernet(key)
+    
     passwords = account.get_passwords()
     data_list = []
     count = 1
     for passw in passwords:
+        decrypted = f.decrypt(passw.password_hash)
         data_dict = {}
         data_dict['pk'] = passw.pk
         data_dict['id'] = count
         data_dict["email"] = passw.email
         data_dict["username"] = passw.username
-        data_dict["password_hash"] = str(passw.password_hash)
+        data_dict["password_hash"] = decrypted.decode("utf8")
         data_dict["site_name"] = passw.site_name
         data_dict["url"] = passw.url
         data_dict["account_pk"] = passw.account_pk
@@ -114,6 +121,7 @@ def post_passwords(api_key):
     print(data)
     #account of the user by the api
     account = Account.api_authenticate(api_key)
+    key = account.get_key()
     #intialized the passwords class
     passwords = Passwords()
     passwords.email = data['email']
@@ -121,7 +129,9 @@ def post_passwords(api_key):
     salt = bcrypt.gensalt()
     passwords.salt = salt
     password = data['password']
-    hashed_pass = util.hash_password(password, salt)
+    password = password.encode()
+    f = Fernet(key)
+    hashed_pass = f.encrypt(password)
     passwords.password_hash = hashed_pass
     passwords.site_name = data["site_name"]
     passwords.url = data["url"]
