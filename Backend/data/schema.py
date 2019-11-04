@@ -20,7 +20,7 @@ def schema(dbpath=DBPATH):
                 password_hash VARCHAR(128),
                 salt VARCHAR UNIQUE,
                 api_key VARCHAR UNIQUE,
-                user_id VARCHAR UNIQUE,
+                user_key VARCHAR UNIQUE,
                 UNIQUE(username)
             );"""
 

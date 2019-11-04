@@ -3,12 +3,13 @@ import bcrypt
 from .util import hash_password
 import random
 from .passwords import Passwords
+import os
 
 
 class Account(ORM):
 
     tablename = "accounts"
-    fields = ['username', 'password_hash', 'salt', 'email', 'api_key', 'user_id']
+    fields = ['username', 'password_hash', 'salt', 'email', 'api_key', 'user_key']
 
     def __init__(self, **kwargs):
         self.pk = kwargs.get('pk')
@@ -17,7 +18,7 @@ class Account(ORM):
         self.email = kwargs.get("email")
         self.api_key = kwargs.get("api_key")
         self.salt = kwargs.get("salt")
-        self.user_id = kwargs.get("user_id")
+        self.user_key = kwargs.get("user_key")
         
 
     @classmethod
@@ -67,3 +68,5 @@ class Account(ORM):
     def search(self, site):
         return Passwords.all_from_where_clause("WHERE site_name=?", values=(site,))
         
+    def set_key(self):
+        self.user_key = os.urandom(32)

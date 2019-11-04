@@ -24,8 +24,7 @@ def create_account():
         
         if(re.search(regex, email)):
             return email
-        else:
-            return jsonify({"Check your Email"})
+        
         
     account.email = validate_email()
     print(account.email)
