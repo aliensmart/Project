@@ -1,0 +1,28 @@
+body{
+    background: linear-gradient(10deg,
+    rgba(72, 0, 72, 1), 
+    rgba(192, 72, 72, 1)
+);
+}
+
+label, span{
+    color: white;
+}
+.log_user,
+.log_pass{
+    width: 150px;
+    margin-bottom: 10px;
+}
+.log{
+    color:white;
+    font-size: 20px;
+    text-align: center;
+}
+input[type="button"]{
+    width: 100px;
+    margin: 0 auto;
+    background: #3F51B5;
+    color: white;
+    border: none;
+    padding: 5px 0;
+}

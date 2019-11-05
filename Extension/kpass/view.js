@@ -1,9 +1,19 @@
 let Backbtn = document.getElementById('back')
 let lgobtn = document.getElementById('Logout')
+let toggle = document.getElementById("passview")
 lgobtn.addEventListener('click', clearLocalStorage)
 Backbtn.addEventListener('click', previous)
 
+toggle.addEventListener('click', toggleView)
 
+function toggleView(){
+    let field = document.getElementById('password');
+    if(field.type=== "password"){
+        field.type = "text"
+    }else{
+        field.type = "password"
+    }
+}
 
 window.addEventListener('load', (event) => {
     chrome.storage.local.get(['key'], function(result){

@@ -2,11 +2,20 @@
 let lgobtn = document.getElementById('Logout')
 let save = document.getElementById('save')
 let view = document.getElementById('passwords')
-
+let toggle = document.getElementById("passview")
 lgobtn.addEventListener('click', clearLocalStorage)
 view.addEventListener('click', viewPass)
 save.addEventListener('click', saveData)
+toggle.addEventListener('click', toggleView)
 
+function toggleView(){
+    let field = document.getElementById('password');
+    if(field.type=== "password"){
+        field.type = "text"
+    }else{
+        field.type = "password"
+    }
+}
 function clearLocalStorage(){
     chrome.storage.local.clear(function(){
         let error  = chrome.runtime.lastError;

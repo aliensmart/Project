@@ -164,21 +164,23 @@ def delet(api_key):
 def get_site(api_key, site):
     account = Account.api_authenticate(api_key)
     password = account.search(site)
-    print(password)
+    key = account.get_key()
+    f = Fernet(key)
 
     if password:
         for passw in password:
+            decrypted = f.decrypt(passw.password_hash)
             data = {}
             data['pk'] = passw.pk
             data["email"] = passw.email
             data["username"] = passw.username
-            data["password_hash"] = str(passw.password_hash)
+            data["password_hash"] = decrypted.decode("utf8")
             data["site_name"] = passw.site_name
             data["url"] = passw.url
             data["account_pk"] = passw.account_pk
             return jsonify({"your_pass":data})
     else:
-        return jsonify({"erro":"not"})
+        return jsonify({"error":"site does not exist"})
 
 
 

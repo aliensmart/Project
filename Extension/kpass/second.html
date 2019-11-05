@@ -4,17 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <script src="https://kit.fontawesome.com/a88d6ca458.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <form id="addbookmark">
         <p>
             <label for="title">Title</label><br />
-            <input type="text" id="title" name="title" size="50" value="" />
+            <input type="text" id="title" name="title" size="50" value="" readonly/>
         </p>
         <p>
             <label for="url">Url</label><br />
-            <input type="text" id="url" name="url" size="50" value="" />
+            <input type="text" id="url" name="url" size="50" value="" readonly/>
         </p>
         <p>
             <label for="email">email</label><br />
@@ -26,12 +27,14 @@
         </p>
         <p>
             <label for="password">password</label><br />
-            <input type="text" id="password" name="password" size="50" value="" />
+            <input type="password" id="password" name="password" size="50" value="" />
+            <input type="checkbox" name="password" id="passview"><span>View password</span>
+            
         </p>
         <p>
             <input id="save" type="button" value="Save" />
-            <input type="button" value="Logout" id="Logout">
-            <input type="button" value="View Password" id="passwords">
+            <input type="button" value="Logout" id="Logout" class="btn btn_logout">
+            <input type="button" value="View Password" id="passwords" class="btn">
             <span id="status-display"></span>
         </p>
     </form>
