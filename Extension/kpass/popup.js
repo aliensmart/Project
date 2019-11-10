@@ -6,6 +6,8 @@ function getToken(){
 let inputPassword = document.getElementById('password').value
 let inputUsername = document.getElementById('username').value
 
+
+
     let xhr = new XMLHttpRequest();
     let url = 'http://localhost:5000/api/get_api_key';
     xhr.open('POST', url, true);
@@ -21,7 +23,7 @@ let inputUsername = document.getElementById('username').value
             if(response.api){
                 
                 chrome.browserAction.setPopup({popup:"second.html"})
-                window.setTimeout(window.close, 500)
+                window.setTimeout(window.location.replace("second.html"), 500)
             }
         }
     }

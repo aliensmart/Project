@@ -64,6 +64,7 @@ window.addEventListener('load', (event) => {
 function previous(){
     window.setTimeout(window.close, 500)
     chrome.browserAction.setPopup({popup:"second.html"})
+    window.setTimeout(window.location.replace("second.html"), 500)
     
 }
 
@@ -71,6 +72,7 @@ function clearLocalStorage(){
     chrome.storage.local.clear(function(){
         let error  = chrome.runtime.lastError;
         chrome.browserAction.setPopup({popup:"popup.html"})
+        window.setTimeout(window.location.replace("popup.html"), 500)
         window.setTimeout(window.close, 500)
         if(error){
             console.error(error)

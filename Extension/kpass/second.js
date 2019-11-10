@@ -1,13 +1,24 @@
-
+//-----------------------------------------------------------------------------------------------------------
+//--Global Variables-----------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 let lgobtn = document.getElementById('Logout')
 let save = document.getElementById('save')
 let view = document.getElementById('passwords')
 let toggle = document.getElementById("passview")
+let generate = document.getElementById("generate")
+
+//---------------------------------------------------------------------------------------------------------
+//--Buttons events-----------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 lgobtn.addEventListener('click', clearLocalStorage)
 view.addEventListener('click', viewPass)
 save.addEventListener('click', saveData)
 toggle.addEventListener('click', toggleView)
+generate.addEventListener('click', generatePass)
 
+//---------------------------------------------------------------------------------------------------------
+//--Toggle to the view page-----------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------
 function toggleView(){
     let field = document.getElementById('password');
     if(field.type=== "password"){
@@ -16,10 +27,33 @@ function toggleView(){
         field.type = "password"
     }
 }
+
+//---------------------------------------------------------------------------------------------------------
+//--Generate Password function-----------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
+function generatePass(){
+    let length = parseInt(document.getElementById("lenght").value)
+    let uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let lowercase = 'abcdefghijklmnopqrstuvwxyz';
+    let numbers = '0123456789';
+    let symbols = '!"#$%&\'()*+,-./:;<=>?@^[\\]^_`{|}~';
+    let all = uppercase + lowercase + numbers + symbols;
+
+    let password = '';
+    
+    for (let i=0; i<=length; i++){
+        let char = Math.floor(Math.random() * all.length)
+        password += all.substring(char, char + 1)
+    }
+    let newPass = password;
+    document.getElementById('password').value = newPass
+}
+
 function clearLocalStorage(){
     chrome.storage.local.clear(function(){
         let error  = chrome.runtime.lastError;
         chrome.browserAction.setPopup({popup:"popup.html"})
+        window.setTimeout(window.location.replace("popup.html"), 500)
         if(error){
             console.error(error)
         }
@@ -29,6 +63,7 @@ function clearLocalStorage(){
 function viewPass(){
     window.setTimeout(window.close, 500)
     chrome.browserAction.setPopup({popup:"viewPassword.html"})
+    window.setTimeout(window.location.replace("viewPassword.html"), 500)
 }
 
 
@@ -82,10 +117,6 @@ function saveData(){
       })
     
 }
-
-
-
-
       // When the popup HTML has loaded
 window.addEventListener('load', function(evt) {
     // Cache a reference to the status display SPAN
