@@ -1,7 +1,7 @@
 {
 
     "name":"Kpass",
-    "description":"button click",
+    "description":"THis extension helps you to generate and store your password into the Kpass main website and retrieve it whenever you forgot your password",
     "version":"1.0",
     "author":"abdoul",
     "background":{
