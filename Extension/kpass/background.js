@@ -10,25 +10,25 @@ function getPageDetails(callback) {
     });
 }
 
-chrome.webRequest.onBeforeRequest.addListener(
-    function(details) {
-      if(details.method == "POST") {
-        formData = details.requestBody.formData;
-        console.log(formData)
-        login = details.requestBody.formData.login
-        user = details.requestBody.formData.user
-        username = details.requestBody.formData.username
-        email = details.requestBody.formData.email
+// chrome.webRequest.onBeforeRequest.addListener(
+//     function(details) {
+//       if(details.method == "POST") {
+//         formData = details.requestBody.formData;
+//         console.log(formData)
+//         login = details.requestBody.formData.login
+//         user = details.requestBody.formData.user
+//         username = details.requestBody.formData.username
+//         email = details.requestBody.formData.email
 
-        password = details.requestBody.formData.password
-        console.log(details.requestBody.formData);
-        console.log(login)
-        console.log(user)
-        console.log(username)
-        console.log(email)
-        console.log(password)
-      }
-    },
-    {urls: ["<all_urls>"]},
-    ["requestBody"]
-  );
+//         password = details.requestBody.formData.password
+//         console.log(details.requestBody.formData);
+//         console.log(login)
+//         console.log(user)
+//         console.log(username)
+//         console.log(email)
+//         console.log(password)
+//       }
+//     },
+//     {urls: ["<all_urls>"]},
+//     ["requestBody"]
+//   );

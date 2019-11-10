@@ -1,12 +1,16 @@
+//-------------------------------------------------------------------------------------
+//--Login button-----------------------------------------------------------------------
+//------------------------------------------------------------------------------------
 let btn = document.getElementById('btn')
 btn.addEventListener('click', getToken)
 
+//------------------------------------------------------------------------------------
+//--Login send data-------------------------------------------------------------------
+//------------------------------------------------------------------------------------
 function getToken(){
 
-let inputPassword = document.getElementById('password').value
-let inputUsername = document.getElementById('username').value
-
-
+    let inputPassword = document.getElementById('password').value
+    let inputUsername = document.getElementById('username').value
 
     let xhr = new XMLHttpRequest();
     let url = 'http://localhost:5000/api/get_api_key';
