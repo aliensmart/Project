@@ -17,7 +17,7 @@ toggle.addEventListener('click', toggleView)
 generate.addEventListener('click', generatePass)
 
 //---------------------------------------------------------------------------------------------------------
-//--Toggle to the view page-----------------------------------------------------------------------------------------
+//--Toggle to the view password-----------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------
 function toggleView(){
     let field = document.getElementById('password');
@@ -29,8 +29,8 @@ function toggleView(){
 }
 
 //---------------------------------------------------------------------------------------------------------
-//--Generate Password function-----------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------
+//--Generate Password function-----------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------
 function generatePass(){
     let length = parseInt(document.getElementById("lenght").value)
     let uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -49,6 +49,10 @@ function generatePass(){
     document.getElementById('password').value = newPass
 }
 
+
+//---------------------------------------------------------------------------------------------------------
+//--Logout function-----------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 function clearLocalStorage(){
     chrome.storage.local.clear(function(){
         let error  = chrome.runtime.lastError;
@@ -60,6 +64,10 @@ function clearLocalStorage(){
     })
 }
 
+
+//---------------------------------------------------------------------------------------------------------
+//--Change page to view password page-----------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 function viewPass(){
     window.setTimeout(window.close, 500)
     chrome.browserAction.setPopup({popup:"viewPassword.html"})
@@ -68,7 +76,6 @@ function viewPass(){
 
 
 //This callback function is called when the content script has been injected and returned its results
-
 function onPageDetailsReceived(pageDetails){
     document.getElementById('title').value = pageDetails.title;
     document.getElementById('url').value = pageDetails.url;
@@ -78,6 +85,10 @@ function onPageDetailsReceived(pageDetails){
 
 // Global reference to the status display SPAN
 let statusDisplay = null;
+
+//---------------------------------------------------------------------------------------------------------
+//--Send data to the database-------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 function saveData(){
     event.preventDefault();
     chrome.storage.local.get(['key'], function(result) {
