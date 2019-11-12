@@ -21,13 +21,12 @@ def create_account():
     account = Account()
     def validate_email():
         email = data["email"]
-        #validate email with these characters
+        #validate email with these characters------------------------------------------------------
         regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
         
         if(re.search(regex, email)):
             return email
-        
-        
+
     account.email = validate_email()
     print(account.email)
     account.username = data["username"]
@@ -124,23 +123,37 @@ def post_passwords(api_key):
     key = account.get_key()
     #intialized the passwords class
     passwords = Passwords()
-    passwords.email = data['email']
-    #created the salt and the password
-    salt = bcrypt.gensalt()
-    passwords.salt = salt
-    password = data['password']
-    password = password.encode()
-    f = Fernet(key)
-    hashed_pass = f.encrypt(password)
-    passwords.password_hash = hashed_pass
-    passwords.site_name = data["site_name"]
-    passwords.url = data["url"]
-    passwords.account_pk = account.pk
-    passwords.username = data['username']
+    def validate_email():
+        email = data["email"]
+        #validate email with these characters------------------------------------------------------
+        regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
+        
+        if(re.search(regex, email)):
+            return email
+        else:
+            return None
+        
+    passwords.email = validate_email()
 
-    passwords.save()
+    if passwords.email !=None:
+        #created the salt and the password
+        salt = bcrypt.gensalt()
+        passwords.salt = salt
+        password = data['password']
+        password = password.encode()
+        f = Fernet(key)
+        hashed_pass = f.encrypt(password)
+        passwords.password_hash = hashed_pass
+        passwords.site_name = data["site_name"]
+        passwords.url = data["url"]
+        passwords.account_pk = account.pk
+        passwords.username = data['username']
 
-    return jsonify({"Added":"worked"})
+        passwords.save()
+
+        return jsonify({"Added":"worked"})
+    else:
+        return jsonify({"error": "Invalid Email Address"})
 
 
 #------------------------------------------------------------------------------------------------------------------------------
